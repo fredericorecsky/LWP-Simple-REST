@@ -23,6 +23,8 @@ Version 0.01
 
 our $VERSION = '0.01';
 
+my $user_agent = "LWP::Simple::REST";
+
 =head1 SYNOPSIS
 
 This module is a simple wrapper for simple http requests.
@@ -43,21 +45,20 @@ Sends a http get to an url on parameters
 =cut
 
 sub http_get {
-    my ( $url, %arguments ) = @_;
+    my ( $url, $arguments ) = @_;
 
     my $ua = LWP::UserAgent->new;
-    $ua->agent('RESTClient');
+    $ua->agent($user_agent);
 
     # Pass a url sanitazier
     my @parameters;
-    while ( my ( $key, $value ) = each %arguments ) {
+    while ( my ( $key, $value ) = each %{ $arguments } ) {
         push @parameters, "$key=$value";
     }
     my $parameters_for_url = join "&", @parameters;
-    
     my $response = $ua->get( $url . "?$parameters_for_url" );
-    
-    return $response;
+
+    return $response->content;
 }
 
 =head2 http_post
@@ -67,6 +68,25 @@ Sends a http post to an url on parameters
 =cut
 
 sub http_post {
+    my ( $url, $arguments ) = @_;
+
+    my $ua = LWP::UserAgent->new;
+    $ua->agent($user_agent);
+
+    my $response = $ua->post( $url,
+        $arguments,
+    );
+
+    return $response->content;
+}
+
+=head2 json_post
+
+Sends a json post request, expects a json response
+
+=cut
+
+sub json_post {
     my ( $url, %arguments ) = @_;
 
     my $ua = LWP::UserAgent->new;
