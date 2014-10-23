@@ -11,38 +11,9 @@ use HTTP::Request;
 use Try::Tiny;
 use JSON;
 
-=head1 NAME
-
-LWP::Simple::REST - A simple procedural interface do http verbs
-
-=head1 VERSION
-
-Version 0.01
-
-=cut
-
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 my $user_agent = "LWP::Simple::REST";
-
-=head1 SYNOPSIS
-
-This module is a simple wrapper for simple http requests.
-
-This is a classical example, to post a information to a server.
-
-    use LWP::Simple::REST qw/http_post/;
-
-    my $foo = http_post( "http://example.org", { example => "1", show => "all" } );
-    ...
-
-=head1 SUBROUTINES/METHODS
-
-=head2 http_get
-
-Sends a http get to an url on parameters
-
-=cut
 
 sub http_get {
     my ( $url, $arguments ) = @_;
@@ -61,11 +32,6 @@ sub http_get {
     return $response->content;
 }
 
-=head2 http_post
-
-Sends a http post to an url on parameters
-
-=cut
 
 sub http_post {
     my ( $url, $arguments ) = @_;
@@ -80,11 +46,6 @@ sub http_post {
     return $response->content;
 }
 
-=head2 json_post
-
-Sends a json post request, expects a json response
-
-=cut
 
 sub json_post {
     my ( $url, %arguments ) = @_;
@@ -109,15 +70,10 @@ sub json_post {
     }
 }
 
-=head2 http_delete
-
-Sends a delete request for the url
-
-=cut
 
 sub http_delete {
     my ( $url, %arguments ) = @_;
-    
+
     my $ua = LWP::UserAgent->new;
     $ua->agent('RESTClient');
 
@@ -134,11 +90,6 @@ sub http_delete {
 
 }
 
-=head2 http_upload
-
-Sends an Upload to url
-
-=cut
 
 # this interface is just plain terrible
 sub http_upload {
@@ -160,13 +111,6 @@ sub http_upload {
 
 }
 
-
-=head2 answer
-
-If you expects a JSON encoded response, this decode the response
-
-=cut
-
 sub answer {
     my ( $response ) = @_;
 
@@ -186,11 +130,55 @@ sub answer {
     my $status = $response->status_line;
 }
 
+=head1 NAME
 
+LWP::Simple::REST - A simple procedural interface do http verbs
+
+=head1 VERSION
+
+Version 0.01
+
+=head1 SYNOPSIS
+
+This module is a simple wrapper for simple http requests.
+
+This is a classical example, to post a information to a server.
+
+    use LWP::Simple::REST qw/http_post/;
+
+    my $foo = http_post( "http://example.org", { example => "1", show => "all" } );
+    ...
+
+=head1 SUBROUTINES/METHODS
+
+=head2 http_get
+
+Sends a http get to an url on parameters
+
+=head2 http_post
+
+Sends a http post to an url on parameters
+
+=head2 json_post
+
+Sends a json post request, expects a json response
+
+=head2 http_delete
+
+Sends a delete request for the url
+
+=head2 http_upload
+
+Sends an Upload to url
+
+=head2 answer
+
+If you expects a JSON encoded response, this decode the response
 
 =head1 AUTHOR
 
 GONCALES, C<< <italo.goncales at gmail.com> >>
+
 RECSKY, C<< <cartas at frederico.me> >>
 
 =head1 BUGS
@@ -269,7 +257,6 @@ YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR
 CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR
 CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 
 =cut
 
