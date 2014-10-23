@@ -150,11 +150,13 @@ LWP::Simple::REST - A simple procedural interface do http verbs
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =head1 SYNOPSIS
 
-This module is a simple wrapper for simple http requests.
+This module is a simple wrapper for simple http requests. It has two groups
+of wrappers, http_ and json_. The first are to use with plain answers, the
+second one assumes a json answer and already decode it.
 
 This is a classical example, to post a information to a server.
 
@@ -165,6 +167,13 @@ This is a classical example, to post a information to a server.
 
 =head1 SUBROUTINES/METHODS
 
+All methods receive an url and a hashref with parameters. Now you can only send
+normal parameters, in future is possible to send json encoded parameters on the
+body.
+
+Also there is a method to upload files to the server, really simple, just in
+hands for small files.
+
 =head2 http_get
 
 Sends a http get to an url on parameters
@@ -172,10 +181,6 @@ Sends a http get to an url on parameters
 =head2 http_post
 
 Sends a http post to an url on parameters
-
-=head2 json_post
-
-Sends a json post request, expects a json response
 
 =head2 http_delete
 
@@ -185,9 +190,13 @@ Sends a delete request for the url
 
 Sends an Upload to url
 
-=head2 answer
+=head2 json_get
 
-If you expects a JSON encoded response, this decode the response
+Sends a get request, expects a json response
+
+=head2 json_post
+
+Sends a post request, expects a json response
 
 =head1 AUTHOR
 
@@ -209,7 +218,9 @@ You can find documentation for this module with the perldoc command.
     perldoc LWP::Simple::REST
 
 
-You can also look for information at:
+Usually we are on irc on irc.perl.org.
+
+    #sao-paulo.pm
 
 =over 4
 
@@ -225,10 +236,6 @@ L<http://annocpan.org/dist/LWP-Simple-REST>
 
 L<http://cpanratings.perl.org/d/LWP-Simple-REST>
 
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/LWP-Simple-REST/>
-
 =back
 
 =head1 LICENSE AND COPYRIGHT
@@ -241,36 +248,6 @@ under the terms of the the Artistic License (2.0). You may obtain a
 copy of the full license at:
 
 L<http://www.perlfoundation.org/artistic_license_2_0>
-
-Any use, modification, and distribution of the Standard or Modified
-Versions is governed by this Artistic License. By using, modifying or
-distributing the Package, you accept this license. Do not use, modify,
-or distribute the Package, if you do not accept this license.
-
-If your Modified Version has been derived from a Modified Version made
-by someone other than you, you are nevertheless required to ensure that
-your Modified Version complies with the requirements of this license.
-
-This license does not grant you the right to use any trademark, service
-mark, tradename, or logo of the Copyright Holder.
-
-This license includes the non-exclusive, worldwide, free-of-charge
-patent license to make, have made, use, offer to sell, sell, import and
-otherwise transfer the Package with respect to any patent claims
-licensable by the Copyright Holder that are necessarily infringed by the
-Package. If you institute patent litigation (including a cross-claim or
-counterclaim) against any party alleging that the Package constitutes
-direct or contributory patent infringement, then this Artistic License
-to you shall terminate on the date that such litigation is filed.
-
-Disclaimer of Warranty: THE PACKAGE IS PROVIDED BY THE COPYRIGHT HOLDER
-AND CONTRIBUTORS "AS IS' AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES.
-THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE, OR NON-INFRINGEMENT ARE DISCLAIMED TO THE EXTENT PERMITTED BY
-YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR
-CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR
-CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE,
-EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 =cut
 
