@@ -94,23 +94,35 @@ sub json_post {
     my ( $url, $arguments ) = @_;
 
     my $ua = LWP::UserAgent->new;
-    $ua->agent('RESTClient');
+    $ua->agent($user_agent);
 
-    #wrong to do fix interface
-    if ( exists $arguments->{ json } ){
-        my $request = HTTP::Request->new( 'POST', $url );
-        $request->header( 'Content-Type' => 'application/json' );
-        $request->content( encode_json( $arguments->{ json } ));
+    #my $request = HTTP::Request->new( 'POST', $url );
+    #$request->header( 'Content-Type' => 'application/json' );
+    #$request->content( encode_json( $arguments->{ json } ));
+    #return  answer( $ua->request( $request ) );
 
-        return  answer( $ua->request( $request ) );
-    }else{
+    my $response = $ua->post( $url,
+        $arguments,
+    );
 
-        my $response = $ua->post( $url,
-            $arguments,
-        );
+    return decode_json $response->content;
+}
 
-        return $response;
+sub json_get {
+    my ( $url, $arguments ) = @_;
+
+    my $ua = LWP::UserAgent->new;
+    $ua->agent($user_agent);
+
+    # Pass a url sanitazier
+    my @parameters;
+    while ( my ( $key, $value ) = each %{ $arguments } ) {
+        push @parameters, "$key=$value";
     }
+    my $parameters_for_url = join "&", @parameters;
+    my $response = $ua->get( $url . "?$parameters_for_url" );
+
+    return decode_json $response->content;
 }
 
 sub answer {
