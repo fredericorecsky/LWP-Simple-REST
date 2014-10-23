@@ -72,13 +72,13 @@ sub upload_post {
 }
 
 sub http_delete {
-    my ( $url, %arguments ) = @_;
+    my ( $url, $arguments ) = @_;
 
     my $ua = LWP::UserAgent->new;
     $ua->agent('RESTClient');
 
     my @parameters;
-    while ( my ( $key, $value ) = each %arguments ) {
+    while ( my ( $key, $value ) = each %{ $arguments } ) {
         push @parameters, "$key=$value";
     }
 
@@ -86,27 +86,27 @@ sub http_delete {
 
     my $response = $ua->delete( $url . "?$parameters_for_url" );
 
-    return $response;
+    return $response->content;
 
 }
 
 sub json_post {
-    my ( $url, %arguments ) = @_;
+    my ( $url, $arguments ) = @_;
 
     my $ua = LWP::UserAgent->new;
     $ua->agent('RESTClient');
 
     #wrong to do fix interface
-    if ( exists $arguments{ json } ){
+    if ( exists $arguments->{ json } ){
         my $request = HTTP::Request->new( 'POST', $url );
         $request->header( 'Content-Type' => 'application/json' );
-        $request->content( encode_json( $arguments{ json } ));
+        $request->content( encode_json( $arguments->{ json } ));
 
         return  answer( $ua->request( $request ) );
     }else{
 
         my $response = $ua->post( $url,
-            \%arguments,
+            $arguments,
         );
 
         return $response;
