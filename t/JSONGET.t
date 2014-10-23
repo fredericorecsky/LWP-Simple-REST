@@ -8,7 +8,7 @@ use LWP::Simple::REST qw/json_get/;
 use Test::More;
 use Test::Exception;
 
-my $answer = '{"daftpunk":"around the world"}'
+my $answer = '{"daftpunk":"around the world"}';
 
 {
     package HTTPTest;
@@ -34,7 +34,7 @@ my $expected_object = {
     daftpunk => "around the world",
 };
 
-is_deeply( $expected_object eq $object, "Answer should be a string" );
+is_deeply( $expected_object, $object, "Answer should be a string" );
 
 done_testing();
 
