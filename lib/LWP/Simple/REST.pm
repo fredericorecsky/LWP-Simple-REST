@@ -4,7 +4,14 @@ use strict;
 use warnings FATAL => 'all';
 
 use Exporter qw( import );
-our @EXPORT_OK = qw/http_get http_post http_delete url/;
+our @EXPORT_OK = qw/
+    http_get
+    http_post
+    http_delete
+    http_upload
+    json_get
+    json_post
+/;
 
 use LWP::UserAgent;
 use HTTP::Request;
@@ -46,6 +53,42 @@ sub http_post {
     return $response->content;
 }
 
+sub upload_post {
+    my ( $url, $json, $filename ) = @_;
+
+    my $ua = LWP::UserAgent->new;
+    $ua->agent('RESTClient');
+
+    my $response = $ua->post(
+        $url,
+        [
+            meta => $json,
+            file => [ $filename ],
+        ],
+        'Content_Type' => 'form-data',
+    );
+
+    return answer( $response );
+}
+
+sub http_delete {
+    my ( $url, %arguments ) = @_;
+
+    my $ua = LWP::UserAgent->new;
+    $ua->agent('RESTClient');
+
+    my @parameters;
+    while ( my ( $key, $value ) = each %arguments ) {
+        push @parameters, "$key=$value";
+    }
+
+    my $parameters_for_url = join "&", @parameters;
+
+    my $response = $ua->delete( $url . "?$parameters_for_url" );
+
+    return $response;
+
+}
 
 sub json_post {
     my ( $url, %arguments ) = @_;
@@ -68,47 +111,6 @@ sub json_post {
 
         return $response;
     }
-}
-
-
-sub http_delete {
-    my ( $url, %arguments ) = @_;
-
-    my $ua = LWP::UserAgent->new;
-    $ua->agent('RESTClient');
-
-    my @parameters;
-    while ( my ( $key, $value ) = each %arguments ) {
-        push @parameters, "$key=$value";
-    }
-
-    my $parameters_for_url = join "&", @parameters;
-
-    my $response = $ua->delete( $url . "?$parameters_for_url" );
-
-    return $response;
-
-}
-
-
-# this interface is just plain terrible
-sub http_upload {
-    my ( $url, $json, $filename ) = @_;
-
-    my $ua = LWP::UserAgent->new;
-    $ua->agent('RESTClient');
-
-    my $response = $ua->post(
-        $url,
-        [
-            meta => $json,
-            file => [ $filename ],
-        ],
-        'Content_Type' => 'form-data',
-    );
-
-    return answer( $response );
-
 }
 
 sub answer {
