@@ -3,7 +3,6 @@ package LWP::Simple::REST;
 use strict;
 use warnings FATAL => 'all';
 use Data::Structure::Util qw( unbless );
-use Data::Dumper;
 
 use Exporter qw( import );
 our @EXPORT_OK = qw/
@@ -171,7 +170,7 @@ LWP::Simple::REST - A simple procedural interface do http verbs
 
 =head1 VERSION
 
-Version 0.02
+Version 0.004
 
 =head1 SYNOPSIS
 
@@ -206,6 +205,10 @@ Sends a http post to an url on parameters
 =head2 http_delete
 
 Sends a delete request for the url
+
+=head2 http_head
+
+Sends a head request for the url, and unblesses the headers's object allowing access the header
 
 =head2 http_upload
 
