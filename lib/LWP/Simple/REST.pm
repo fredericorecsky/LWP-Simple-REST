@@ -3,16 +3,19 @@ package LWP::Simple::REST;
 use strict;
 use warnings FATAL => 'all';
 use Data::Structure::Util qw( unbless );
+use Data::Dumper;
 
 use Exporter qw( import );
 our @EXPORT_OK = qw/
     http_get
     http_post
+    http_put
     http_delete
     http_head
     http_upload
     json_get
     json_post
+    json_put
     json_head
 /;
 
@@ -21,7 +24,7 @@ use HTTP::Request;
 use Try::Tiny;
 use JSON;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 my $user_agent = "LWP::Simple::REST";
 
@@ -55,6 +58,36 @@ sub http_post {
 
     return $response->content;
 }
+
+sub http_put {
+    my ( $url, $arguments ) = @_;
+
+    my $ua = LWP::UserAgent->new;
+    $ua->agent($user_agent);
+
+    # Pass a url sanitazier
+    my @parameters;
+    while ( my ( $key, $value ) = each %{ $arguments } ) {
+        push @parameters, "$key=$value";
+    }
+    my $parameters_for_url = join "&", @parameters;
+    my $response = $ua->put( $url . "?$parameters_for_url" );
+
+    return $response->content;
+}
+#sub http_put {
+#    my ( $url, $arguments ) = @_;
+
+#    my $ua = LWP::UserAgent->new;
+#    $ua->agent($user_agent);
+    
+#    my $response = $ua->put( $url,
+#        $arguments,
+#    );
+    
+#    print Dumper $response;
+#    return $response->content;
+#}
 
 sub upload_post {
     my ( $url, $json, $filename ) = @_;
@@ -122,6 +155,19 @@ sub json_post {
     #return  answer( $ua->request( $request ) );
 
     my $response = $ua->post( $url,
+        $arguments,
+    );
+
+    return decode_json $response->content;
+}
+
+sub json_put {
+    my ( $url, $arguments ) = @_;
+
+    my $ua = LWP::UserAgent->new;
+    $ua->agent($user_agent);
+
+    my $response = $ua->put( $url,
         $arguments,
     );
 
