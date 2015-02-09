@@ -170,7 +170,7 @@ LWP::Simple::REST - A simple procedural interface do http verbs
 
 =head1 VERSION
 
-Version 0.004
+Version 0.005
 
 =head1 SYNOPSIS
 
@@ -191,16 +191,16 @@ All methods receive an url and a hashref with parameters. Now you can only send
 normal parameters, in future is possible to send json encoded parameters on the
 body.
 
-Also there is a method to upload files to the server, really simple, just in
+Also there is a method to upload files to the server, really simple, just on
 hands for small files.
 
 =head2 http_get
 
-Sends a http get to an url on parameters
+Sends a http get and returns the content of this request
 
 =head2 http_post
 
-Sends a http post to an url on parameters
+Sends a http post and returns the content of this request
 
 =head2 http_delete
 
@@ -226,7 +226,7 @@ Sends a post request, expects a json response
 
 GONCALES, C<< <italo.goncales at gmail.com> >>
 
-RECSKY, C<< <cartas at frederico.me> >>
+RECSKY, C<< <recsky at cpan.org> >>
 
 =head1 BUGS
 
