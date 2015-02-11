@@ -139,7 +139,7 @@ sub http_head {
     my $parameters_for_url = join "&", @parameters;
     my $response = $ua->head( $url . "?$parameters_for_url" );
 
-    return unbless($response->headers);
+    return $response->headers;
 
 }
 
