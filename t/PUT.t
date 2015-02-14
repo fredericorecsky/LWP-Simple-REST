@@ -20,6 +20,10 @@ my $answer = "argument1=one";
         print "HTTP/1.0 200 OK\r\n";
         print $cgi->header, $answer;
     }
+
+    sub setup {
+        
+    }
 }
 
 my $server = HTTPTest->new(3024)->background();
