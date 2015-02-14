@@ -65,29 +65,12 @@ sub http_put {
     my $ua = LWP::UserAgent->new;
     $ua->agent($user_agent);
 
-    # Pass a url sanitazier
-    my @parameters;
-    while ( my ( $key, $value ) = each %{ $arguments } ) {
-        push @parameters, "$key=$value";
-    }
-    my $parameters_for_url = join "&", @parameters;
-    my $response = $ua->put( $url . "?$parameters_for_url" );
+    my $response = $ua->put( $url,
+        $arguments,
+    );
 
     return $response->content;
 }
-#sub http_put {
-#    my ( $url, $arguments ) = @_;
-
-#    my $ua = LWP::UserAgent->new;
-#    $ua->agent($user_agent);
-    
-#    my $response = $ua->put( $url,
-#        $arguments,
-#    );
-    
-#    print Dumper $response;
-#    return $response->content;
-#}
 
 sub upload_post {
     my ( $url, $json, $filename ) = @_;
