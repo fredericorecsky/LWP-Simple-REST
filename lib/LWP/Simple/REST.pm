@@ -24,7 +24,7 @@ use HTTP::Request;
 use Try::Tiny;
 use JSON;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 my $user_agent = "LWP::Simple::REST";
 
