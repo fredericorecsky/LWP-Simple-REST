@@ -3,11 +3,16 @@
 use strict;
 use warnings;
 
+use Data::Dumper;
+
 use LWP::Simple::REST qw/http_head/;
 use Test::More;
 use Test::Exception;
 
-my $answer = "text/html; charset=ISO-8859-1";
+my @answer = qw(
+    text/html
+    charset=ISO-8859-1
+);
 
 {
     package HTTPTest;
@@ -17,19 +22,27 @@ my $answer = "text/html; charset=ISO-8859-1";
         my $self = shift;
         my $cgi  = shift;
 
+
+
         print "HTTP/1.0 200 OK\r\n";
-        print $cgi->header, $answer;
+        print $cgi->header, "text/html; charset=ISO-8859-1";
     }
 }
 
 my $server = HTTPTest->new(3024)->background();
 
-my $string;
+my $http_header;
 lives_ok {
-    $string = http_head( "http://localhost:3024", { argument1 => "one" } );
+    $http_header = http_head( "http://localhost:3024", { argument1 => "one" } );
+    print ref $http_header . "\n\n";
+    if ( "HTTP::Headers" ne ref $http_header ) {
+        die "not HTTP::Headers";
+    }
 } 'Request sent';
 
-ok( $answer eq $string->{ 'content-type' }, "Can access header from unblessed headers." );
+my @content_type = $http_header->content_type;
+
+is_deeply( \@answer, \@content_type, "Can access header from unblessed headers." );
 
 done_testing();
 
