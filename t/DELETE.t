@@ -3,26 +3,16 @@
 use strict;
 use warnings;
 
-use HTTP::Server::Simple::CGI;
+use Data::Dumper;
+
+use HTTPTest;
 use LWP::Simple::REST qw/http_delete/;
 use Test::More;
 use Test::Exception;
 
-my $answer = "argument1=one";
+my $expected_answer = "argument1=one";
 
-{
-    package HTTPTest;
-    use base qw/HTTP::Server::Simple::CGI/;
-
-    sub handle_request{
-        my $self = shift;
-        my $cgi  = shift;
-
-        print "HTTP/1.0 200 OK\r\n";
-        print $cgi->header, $answer;
-    }
-}
-
+HTTPTest->answer( $expected_answer );
 my $server = HTTPTest->new(3024)->background();
 
 my $string;
@@ -30,7 +20,9 @@ lives_ok {
     $string = http_delete( "http://localhost:3024", { argument1 => "one" } );
 } 'Request sent';
 
-ok( $answer eq $string, "Answer should be a string" );
+print Dumper $string;
+
+ok( $expected_answer eq $string, "Answer should be a string" );
 
 done_testing();
 
