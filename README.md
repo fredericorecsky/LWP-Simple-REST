@@ -47,3 +47,5 @@ You can also browse the git repository at:
      https://github.com/ItaloGoncales/LWP-Simple-REST
 
 Enjoy!
+
+[![endorse](https://api.coderwall.com/Goncales/endorsecount.png)](https://coderwall.com/Goncales)

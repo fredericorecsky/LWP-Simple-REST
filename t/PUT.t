@@ -29,7 +29,7 @@ my $answer = "argument1=one";
 my $server = HTTPTest->new(3024)->background();
 
 my $string;
-print "i'm here\n";
+
 lives_ok {
     $string = http_put( "http://localhost:3024", { argument1 => "one" } );
 } 'Request sent';

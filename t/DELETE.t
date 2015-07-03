@@ -5,14 +5,29 @@ use warnings;
 
 use Data::Dumper;
 
-use HTTPTest;
 use LWP::Simple::REST qw/http_delete/;
 use Test::More;
 use Test::Exception;
 
 my $expected_answer = "argument1=one";
 
-HTTPTest->answer( $expected_answer );
+{
+    package HTTPTest;
+    use base qw/HTTP::Server::Simple::CGI/;
+
+    sub handle_request{
+        my $self = shift;
+        my $cgi  = shift;
+
+        print "HTTP/1.0 200 OK\r\n";
+        print $cgi->header, $expected_answer;
+    }
+
+    sub setup {
+
+    }
+}
+
 my $server = HTTPTest->new(3024)->background();
 
 my $string;
