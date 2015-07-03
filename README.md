@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ItaloGoncales/LWP-Simple-REST.svg?branch=master)](https://travis-ci.org/ItaloGoncales/LWP-Simple-REST)
+[![endorse](https://api.coderwall.com/Goncales/endorsecount.png)](https://coderwall.com/Goncales)
  
                              LWP-Simple-REST
            --------------------------------------------------
@@ -48,4 +50,3 @@ You can also browse the git repository at:
 
 Enjoy!
 
-[![endorse](https://api.coderwall.com/Goncales/endorsecount.png)](https://coderwall.com/Goncales)
