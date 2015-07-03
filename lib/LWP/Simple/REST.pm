@@ -2,8 +2,9 @@ package LWP::Simple::REST;
 
 use strict;
 use warnings FATAL => 'all';
+
+use Cwd;
 use Data::Structure::Util qw( unbless );
-use Data::Dumper;
 
 use Exporter qw( import );
 our @EXPORT_OK = qw/
@@ -24,7 +25,7 @@ use HTTP::Request;
 use Try::Tiny;
 use JSON;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 my $user_agent = "LWP::Simple::REST";
 
@@ -34,7 +35,7 @@ sub http_get {
     my $ua = LWP::UserAgent->new;
     $ua->agent($user_agent);
 
-    # Pass a url sanitazier
+    # Pass a url sanitizer
     my @parameters;
     while ( my ( $key, $value ) = each %{ $arguments } ) {
         push @parameters, "$key=$value";
@@ -81,7 +82,6 @@ sub upload_post {
     my $response = $ua->post(
         $url,
         [
-            meta => $json,
             file => [ $filename ],
         ],
         'Content_Type' => 'form-data',
@@ -131,11 +131,6 @@ sub json_post {
 
     my $ua = LWP::UserAgent->new;
     $ua->agent($user_agent);
-
-    #my $request = HTTP::Request->new( 'POST', $url );
-    #$request->header( 'Content-Type' => 'application/json' );
-    #$request->content( encode_json( $arguments->{ json } ));
-    #return  answer( $ua->request( $request ) );
 
     my $response = $ua->post( $url,
         $arguments,
@@ -199,7 +194,7 @@ LWP::Simple::REST - A simple procedural interface do http verbs
 
 =head1 VERSION
 
-Version 0.005
+Version 0.007
 
 =head1 SYNOPSIS
 
