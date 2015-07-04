@@ -1,6 +1,8 @@
 Revision history for Perl CPAN distribution LWP-Simple-REST
 
 0.08 2015-07-?? GONCALES
+    - Added [GithubMeta] to dist.ini, so the dist metadata will contain
+      the github repo.
     - Reformatted this file to have most recent entry first,
       and adjusted formatting to match CPAN::Changes::Spec.
 
