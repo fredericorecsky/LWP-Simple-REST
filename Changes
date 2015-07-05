@@ -1,20 +1,32 @@
-Revision history for LWP-Simple-REST
+Revision history for Perl CPAN distribution LWP-Simple-REST
 
-0.001    Date/time
-        First version, released on an unsuspecting world.
+0.08 2015-07-?? GONCALES
+    - Added [GithubMeta] to dist.ini, so the dist metadata will contain
+      the github repo.
+    - Added [MetaJSON] to dist.ini, so releases will include a META.json file.
+    - Reformatted this file to have most recent entry first,
+      and adjusted formatting to match CPAN::Changes::Spec.
 
-0.002    Json requests and Fix broken code
-        Added Json requests and fix the old code
+0.07 2015-07-03 GONCALES
+    - Fix some test bugs
 
-0.003    Fix dependency issue
-        Fixed the missing dependency prerequisite issue 
+0.06 2015-02-14 RECSKY
 
-0.04    HEAD
-        This version includes the http_head method, allowing to send HTTP HEAD request to a server
-        Fixed the version
+0.05 2015-02-09 RECSKY
 
-0.05   -
+0.04 2014-11-13 GONCALES
+    - This version includes the http_head method,
+      allowing to send HTTP HEAD request to a server
+    - Fixed the version
 
-0.06   -
+0.004 2014-11-13 GONCALES
 
-0.07   Fix some test bugs
+0.003 2014-11-13 GONCALES
+    - Fixed the missing dependency prerequisite issue 
+
+0.002 2014-10-23 RECSKY
+    - Added Json requests and fix the old code
+
+0.001 2014-09-20 GONCALES
+    - First version, released on an unsuspecting world.
+
