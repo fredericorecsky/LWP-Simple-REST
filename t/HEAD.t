@@ -30,6 +30,7 @@ my @answer = qw(
 }
 
 my $server = HTTPTest->new(3024)->background();
+sleep 2;
 
 my $http_header;
 lives_ok {

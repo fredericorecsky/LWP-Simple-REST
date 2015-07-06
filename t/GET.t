@@ -23,6 +23,7 @@ my $answer = "argument1=one";
 }
 
 my $server = HTTPTest->new(3024)->background();
+sleep 2;
 
 my $string;
 lives_ok {

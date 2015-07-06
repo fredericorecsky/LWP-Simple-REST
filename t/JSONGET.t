@@ -24,6 +24,7 @@ my $answer = '{"daftpunk":"around the world"}';
 }
 
 my $server = HTTPTest->new(3024)->background();
+sleep 2;
 
 my $object;
 lives_ok {

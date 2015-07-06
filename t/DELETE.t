@@ -28,14 +28,15 @@ my $expected_answer = "argument1=one";
     }
 }
 
+
 my $server = HTTPTest->new(3024)->background();
+sleep 2;
 
 my $string;
+
 lives_ok {
     $string = http_delete( "http://localhost:3024", { argument1 => "one" } );
 } 'Request sent';
-
-print Dumper $string;
 
 ok( $expected_answer eq $string, "Answer should be a string" );
 
