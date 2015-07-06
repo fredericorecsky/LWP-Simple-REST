@@ -29,12 +29,15 @@ my @answer = qw(
     }
 }
 
-my $server = HTTPTest->new(3024)->background();
+my $server = HTTPTest->new();
+my $port = $server->port;
+my $server_pid = $server->background();
+
 sleep 2;
 
 my $http_header;
 lives_ok {
-    $http_header = http_head( "http://localhost:3024", { argument1 => "one" } );
+    $http_header = http_head( "http://localhost:" . $port, { argument1 => "one" } );
     print ref $http_header . "\n\n";
     if ( "HTTP::Headers" ne ref $http_header ) {
         die "not HTTP::Headers";
@@ -47,5 +50,5 @@ is_deeply( \@answer, \@content_type, "Can access header from unblessed headers."
 
 done_testing();
 
-my $cnt = kill 9, $server;
+my $cnt = kill 9, $server_pid;
 

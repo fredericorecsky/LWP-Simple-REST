@@ -1,5 +1,9 @@
 Revision history for Perl CPAN distribution LWP-Simple-REST
 
+0.09 2015-07-06 GONCALES
+    - Fixed the cpantesters error on server hardcoded port. Now it gets the server
+      port and make a request ( Bug #105670 ).
+
 0.08 2015-07-06 GONCALES
     - Added [GithubMeta] to dist.ini, so the dist metadata will contain
       the github repo.

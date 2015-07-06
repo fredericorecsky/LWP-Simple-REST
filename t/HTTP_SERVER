@@ -25,7 +25,7 @@ my $answer = "argument1=one";
     }
 }
 
-my $server = HTTPTest->new(3024)->background();
+my $server = HTTPTest->new()->background();
 
 sleep 0 * 60;
 
