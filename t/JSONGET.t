@@ -23,15 +23,18 @@ my $answer = '{"daftpunk":"around the world"}';
     }
 }
 
-my $server = HTTPTest->new();
-my $port = $server->port();
-my $server_pid = $server->background();
+my $server = HTTPTest->new(3033)->background();
 
 sleep 2;
 
 my $object;
 lives_ok {
-    $object = json_get( "http://localhost:" . $port );
+    for ( 0 .. 2 ){
+        $object = json_get( "http://localhost:3033");
+        last if $object;
+        sleep 1;
+    }
+    fail("Cannot connect to server") if !$object;
 } 'Request sent';
 
 my $expected_object = {
@@ -42,5 +45,5 @@ is_deeply( $expected_object, $object, "Answer should be a string" );
 
 done_testing();
 
-my $cnt = kill 9, $server_pid;
+my $cnt = kill 9, $server;
 

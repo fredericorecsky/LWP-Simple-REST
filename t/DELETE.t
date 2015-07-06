@@ -28,22 +28,24 @@ my $expected_answer = "argument1=one";
     }
 }
 
-
-my $server = HTTPTest->new();
-my $port = $server->port;
-my $server_pid = $server->background();
+my $server = HTTPTest->new(3031)->background();
 
 sleep 2;
 
 my $string;
 
 lives_ok {
-    $string = http_delete( "http://localhost:" . $port, { argument1 => "one" } );
+    for ( 0 .. 2 ){
+        $string = http_delete( "http://localhost:3031", { argument1 => "one" } );
+        last if $string;
+        sleep 1;
+    }
+    fail("Cannot connect on server") if !$string;
 } 'Request sent';
 
 ok( $expected_answer eq $string, "Answer should be a string" );
 
 done_testing();
 
-my $cnt = kill 9, $server_pid;
+my $cnt = kill 9, $server;
 

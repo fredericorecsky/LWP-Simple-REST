@@ -1,5 +1,8 @@
 Revision history for Perl CPAN distribution LWP-Simple-REST
 
+0.091 2015-07-06 GONCALES
+    - Fixed server's port error. Each test have their specific port now.
+
 0.09 2015-07-06 GONCALES
     - Fixed the cpantesters error on server hardcoded port. Now it gets the server
       port and make a request ( Bug #105670 ).
