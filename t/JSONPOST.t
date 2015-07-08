@@ -7,6 +7,7 @@ use JSON;
 use LWP::Simple::REST qw/json_post/;
 use Test::More;
 use Test::Exception;
+use Try::Tiny;
 
 my $answer = '{"daftpunk":"around the world"}';
 
@@ -25,14 +26,24 @@ my $answer = '{"daftpunk":"around the world"}';
 
 my $server = HTTPTest->new(3032)->background();
 
+sleep 2;
+
 my $object;
+my $error = 0;
+
 lives_ok {
     for ( 0 .. 2 ){
-        $object = json_post( "http://localhost:3032", { anyparameter => "not json yet" } );
+        try{
+            $object = json_post( "http://localhost:3032", { anyparameter => "not json yet" } );
+            sleep 1;
+        }
+        catch{
+            $error++;
+        };
         last if $object;
-        sleep 1;
     }
-    fail("Cannot connect to server") if !$object;
+    #BAIL_OUT("Cannot connect to server") if $error == 3;
+    die "Cannot connect to server" if $error == 3;
 } 'Request sent';
 
 my $expected_object = {
