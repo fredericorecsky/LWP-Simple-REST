@@ -25,7 +25,7 @@ use HTTP::Request;
 use Try::Tiny;
 use JSON;
 
-our $VERSION = '0.091';
+our $VERSION = '0.092';
 
 my $user_agent = "LWP::Simple::REST";
 
@@ -194,7 +194,7 @@ LWP::Simple::REST - A simple procedural interface do http verbs
 
 =head1 VERSION
 
-Version 0.091
+Version 0.092
 
 =head1 SYNOPSIS
 
