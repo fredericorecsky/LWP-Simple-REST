@@ -1,5 +1,9 @@
 Revision history for Perl CPAN distribution LWP-Simple-REST
 
+0.10 RECSKY
+    - Remove Data::Structure::Util
+    - Added Object Oriented Interface
+
 0.092 2015-07-08 GONCALES
     - Fixed JSON tests
 

@@ -4,7 +4,6 @@ use strict;
 use warnings FATAL => 'all';
 
 use Cwd;
-use Data::Structure::Util qw( unbless );
 
 use Exporter qw( import );
 our @EXPORT_OK = qw/
@@ -25,9 +24,19 @@ use HTTP::Request;
 use Try::Tiny;
 use JSON;
 
-our $VERSION = '0.092';
+our $VERSION = '0.10';
+
+
+
+sub new {
+    my ( $class, %args ) = @_;
+    my $self = {
+    };
+}
+
 
 my $user_agent = "LWP::Simple::REST";
+
 
 sub http_get {
     my ( $url, $arguments ) = @_;
