@@ -7,6 +7,15 @@ use Cwd;
 
 use Exporter qw( import );
 our @EXPORT_OK = qw/
+    HEAD
+    GET
+    POST
+    DELETE
+    PUT
+    json
+    plain
+    headers
+    response
     http_get
     http_post
     http_put
@@ -24,62 +33,65 @@ use HTTP::Request;
 use Try::Tiny;
 use JSON;
 
-our $VERSION = '0.10';
-
-
-
-sub new {
-    my ( $class, %args ) = @_;
-    my $self = {
-    };
-}
-
+our $VERSION = '0.20';
 
 my $user_agent = "LWP::Simple::REST";
+my $lwp = LWP::UserAgent->new;
+my $response;
 
+sub user_agent { $lwp->agent( $_[0] ) }
 
-sub http_get {
+sub response { $response }
+
+sub plain { return ($_[0]->content ) }
+
+sub json { return decode_json($_[0]->content ) }
+
+sub headers { return $_[0] ? $_[0]->headers : $response->headers  };
+
+sub POST {
+    my ( $url, $arguments, $content ) = @_;
+
+    $response = $lwp->post( $url, $arguments );
+}
+
+sub PUT {
     my ( $url, $arguments ) = @_;
 
-    my $ua = LWP::UserAgent->new;
-    $ua->agent($user_agent);
+    $response = $lwp->put( $url, $arguments );
+}
 
-    # Pass a url sanitizer
+sub GET {
+    my ( $url, $arguments ) = @_;
+
+    $arguments = _parameters( $arguments );
+
+    $response = $lwp->get( $url, $arguments );
+}
+
+sub DELETE {
+    my ( $url, $arguments ) = @_;
+
+    $arguments = _parameters( $arguments );
+
+    $response = $lwp->delete( $url, $arguments );
+}
+
+sub HEAD {
+    my ( $url, $arguments ) = @_;
+
+    $arguments = _parameters( $arguments );
+
+    $response = $lwp->head( $url, $arguments );
+}
+
+sub _parameters {
+    my ( $arguments ) = @_;
     my @parameters;
-    while ( my ( $key, $value ) = each %{ $arguments } ) {
+    while( my ( $key, $value )  = each %{ $arguments } ) {
         push @parameters, "$key=$value";
     }
-    my $parameters_for_url = join "&", @parameters;
-    my $response = $ua->get( $url . "?$parameters_for_url" );
-
-    return $response->content;
-}
-
-
-sub http_post {
-    my ( $url, $arguments ) = @_;
-
-    my $ua = LWP::UserAgent->new;
-    $ua->agent($user_agent);
-
-    my $response = $ua->post( $url,
-        $arguments,
-    );
-
-    return $response->content;
-}
-
-sub http_put {
-    my ( $url, $arguments ) = @_;
-
-    my $ua = LWP::UserAgent->new;
-    $ua->agent($user_agent);
-
-    my $response = $ua->put( $url,
-        $arguments,
-    );
-
-    return $response->content;
+    return '?' . ( join '&', @parameters );
 }
 
 sub upload_post {
@@ -99,84 +111,25 @@ sub upload_post {
     return answer( $response );
 }
 
-sub http_delete {
-    my ( $url, $arguments ) = @_;
+#
+# The functions above are kept for the sake of compatibility
+#
 
-    my $ua = LWP::UserAgent->new;
-    $ua->agent('RESTClient');
+sub http_get { plain GET }
 
-    my @parameters;
-    while ( my ( $key, $value ) = each %{ $arguments } ) {
-        push @parameters, "$key=$value";
-    }
+sub http_post { plain POST }
 
-    my $parameters_for_url = join "&", @parameters;
+sub http_put { plain PUT }
 
-    my $response = $ua->delete( $url . "?$parameters_for_url" );
+sub http_delete { plain DELETE }
 
-    return $response->content;
+sub http_head { headers HEAD }
 
-}
+sub json_post { json POST }
 
-sub http_head {
-    my ( $url, $arguments ) = @_;
+sub json_put { json PUT }
 
-    my $ua = LWP::UserAgent->new;
-    $ua->agent($user_agent);
-
-    my @parameters;
-    while ( my ( $key, $value ) = each %{ $arguments } ){
-        push @parameters, "$key=$value";
-    }
-    my $parameters_for_url = join "&", @parameters;
-    my $response = $ua->head( $url . "?$parameters_for_url" );
-
-    return $response->headers;
-
-}
-
-sub json_post {
-    my ( $url, $arguments ) = @_;
-
-    my $ua = LWP::UserAgent->new;
-    $ua->agent($user_agent);
-
-    my $response = $ua->post( $url,
-        $arguments,
-    );
-
-    return decode_json $response->content;
-}
-
-sub json_put {
-    my ( $url, $arguments ) = @_;
-
-    my $ua = LWP::UserAgent->new;
-    $ua->agent($user_agent);
-
-    my $response = $ua->put( $url,
-        $arguments,
-    );
-
-    return decode_json $response->content;
-}
-
-sub json_get {
-    my ( $url, $arguments ) = @_;
-
-    my $ua = LWP::UserAgent->new;
-    $ua->agent($user_agent);
-
-    # Pass a url sanitazier
-    my @parameters;
-    while ( my ( $key, $value ) = each %{ $arguments } ) {
-        push @parameters, "$key=$value";
-    }
-    my $parameters_for_url = join "&", @parameters;
-    my $response = $ua->get( $url . "?$parameters_for_url" );
-
-    return decode_json $response->content;
-}
+sub json_get { json GET }
 
 sub answer {
     my ( $response ) = @_;
@@ -199,67 +152,70 @@ sub answer {
 
 =head1 NAME
 
-LWP::Simple::REST - A simple procedural interface do http verbs
+LWP::Simple::REST - A simple funcional interface to LWP::UserAgent, focused to 
+                    quick use and test HTTP/REST apis
 
 =head1 VERSION
 
-Version 0.092
+Version 0.2
 
 =head1 SYNOPSIS
 
-This module is a simple wrapper for simple http requests. It has two groups
-of wrappers, http_ and json_. The first are to use with plain answers, the
-second one assumes a json answer and already decode it.
+This module is a simple wrapper for simple http requests. It provides functions
+to create clients to whatever http services, mainly REST ones. The goal is to be 
+simple and straight forward.
 
-This is a classical example, to post a information to a server.
+This version 0.2 tries to make it simpler, instead of have dozens of methods we just
+have the basic method and let you combine them as you need. The old ones are kept for
+compatibilty but are now deprecated.
 
-    use LWP::Simple::REST qw/http_post/;
+This is the actual main example:
 
-    my $foo = http_post( "http://example.org", { example => "1", show => "all" } );
-    ...
+    use LWP::Simple::REST qw/POST json plain/;
+
+    my $foo = plain POST ( "http://example.org", { example => "1", show => "all" } );
+    
+    or decoding the interface
+
+    my $foo = json POST ( "http://example.org", { example => "1", show => "all" } );
+
+In fact, the old http_post routine is actually just a wrapper for plain POST
+
+The http verbs are all caps, and normal methods are in low case. You need to ask 
+to export them.
 
 =head1 SUBROUTINES/METHODS
 
-All methods receive an url and a hashref with parameters. Now you can only send
-normal parameters, in future is possible to send json encoded parameters on the
-body.
+All http verbs methods receive an url and a hashref with parameters. The other methods 
+have each one it own interface.
 
-Also there is a method to upload files to the server, really simple, just on
-hands for small files.
+=head2 GET, PUT, POST, DELETE, HEAD
 
-=head2 http_get
+They are the http verbs, they return an HTTP::Response object
 
-Sends a http get and returns the content of this request
+=head2 plain
 
-=head2 http_post
+Receives an response and returns just the content, usually the calls will be like
 
-Sends a http post and returns the content of this request
+my $var = plain POST ( $url, $arguments )
 
-=head2 http_delete
+=head2 json
 
-Sends a delete request for the url
+Same for above, but also decode_json the content
 
-=head2 http_head
+=head2 Old deprecated methods:
 
-Sends a head request for the url, and unblesses the headers's object allowing access the header
+http_get, http_post, http_delete http_head http_upload json_get json_post
 
-=head2 http_upload
+Are old methods kept just for compatibility, actually it will be preferred to
+use the new interface:
 
-Sends an Upload to url
-
-=head2 json_get
-
-Sends a get request, expects a json response
-
-=head2 json_post
-
-Sends a post request, expects a json response
+headers HEAD $url, $parameters
 
 =head1 AUTHOR
 
-GONCALES, C<< <italo.goncales at gmail.com> >>
-
 RECSKY, C<< <recsky at cpan.org> >>
+GONCALES, C<< <italo.goncales at gmail.com> >>
 
 =head1 BUGS
 
@@ -267,13 +223,11 @@ Please report any bugs or feature requests to C<bug-lwp-simple-rest at rt.cpan.o
 the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=LWP-Simple-REST>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
-
 =head1 SUPPORT
 
 You can find documentation for this module with the perldoc command.
 
     perldoc LWP::Simple::REST
-
 
 Usually we are on irc on irc.perl.org.
 
