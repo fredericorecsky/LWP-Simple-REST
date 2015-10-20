@@ -115,21 +115,21 @@ sub upload_post {
 # The functions above are kept for the sake of compatibility
 #
 
-sub http_get { plain GET }
+sub http_get { plain &GET }
 
-sub http_post { plain POST }
+sub http_post { plain &POST }
 
-sub http_put { plain PUT }
+sub http_put { plain &PUT }
 
-sub http_delete { plain DELETE }
+sub http_delete { plain &DELETE }
 
-sub http_head { headers HEAD }
+sub http_head { headers &HEAD }
 
-sub json_post { json POST }
+sub json_post { json &POST }
 
-sub json_put { json PUT }
+sub json_put { json &PUT }
 
-sub json_get { json GET }
+sub json_get { json &GET }
 
 sub answer {
     my ( $response ) = @_;
