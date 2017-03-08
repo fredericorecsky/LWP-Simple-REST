@@ -35,7 +35,7 @@ directly.
 SUPPORT
 
 Bug reports and suggestions for improvements can be sent to the
-<italo.goncales@gmail.com> or <cartas@frederico.me>.
+<italo.goncales@gmail.com> or <recsky@cpan.org>.
 
 AVAILABILITY
 
