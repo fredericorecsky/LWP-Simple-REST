@@ -1,5 +1,10 @@
 Revision history for Perl CPAN distribution LWP-Simple-REST
 
+0.11 RECSKY
+    - New internal interface
+    - New external interface
+    - Old interface still working
+
 0.10 RECSKY
     - Remove Data::Structure::Util
     - Added Object Oriented Interface
